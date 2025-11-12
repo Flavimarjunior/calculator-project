@@ -49,10 +49,9 @@ sap.ui.define([
                 return;
             }
 
-            // Se for operador
+            // Se for operador - CHAMANDO A NOVA FUNÇÃO
             if (["+", "-", "*", "÷"].includes(sText)) {
-                oModel.setProperty("/operador", sText);
-                oModel.setProperty("/display", sDisplay + " " + sText + " ");
+                this.handleOperator(sText, oModel, sDisplay); // ← TROQUEI ESTA LINHA
                 return;
             }
 
@@ -60,19 +59,45 @@ sap.ui.define([
             oModel.setProperty("/display", sDisplay + sText);
         },
 
+        handleOperator(sOperator, oModel, sDisplay) {
+            // Remove espaços para análise
+            let cleanDisplay = sDisplay.trim();
+
+            // Verifica se o último caractere é um operador
+            let lastChar = cleanDisplay.slice(-1);
+            let secondLastChar = cleanDisplay.slice(-2, -1);
+
+            // Se o último caractere já é um operador, substitui
+            if (["+", "-", "*", "÷"].includes(lastChar)) {
+                // Remove o último operador e adiciona o novo
+                let newDisplay = cleanDisplay.slice(0, -1) + sOperator;
+                oModel.setProperty("/display", newDisplay + " ");
+            }
+            // Caso especial: se for "-" após outro operador (números negativos)
+            else if (sOperator === "-" && ["+", "-", "*", "÷"].includes(lastChar)) {
+                oModel.setProperty("/display", sDisplay + " " + sOperator);
+            }
+            else {
+                // Adiciona o operador normalmente
+                oModel.setProperty("/display", sDisplay + " " + sOperator + " ");
+            }
+
+            oModel.setProperty("/operador", sOperator);
+        },
+
         onCalculate() {
             let oModel = this.oViewModel;
             let sDisplay = oModel.getProperty("/display");
 
             try {
-                // Substituir "÷" por "/"
-                let expression = sDisplay.replace(/÷/g, "/");
+                // Limpa espaços extras e substitui "÷" por "/"
+                let expression = sDisplay.replace(/\s+/g, '').replace(/÷/g, "/");
 
                 // Calcular o resultado
                 let result = eval(expression); // Não usar em produção sem sanitização
 
                 oModel.setProperty("/resultado", result);
-                oModel.setProperty("/display", result);
+                oModel.setProperty("/display", result.toString());
             } catch (err) {
                 MessageToast.show("Expressão inválida");
             }
