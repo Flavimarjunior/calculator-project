@@ -1,0 +1,38 @@
+<mvc:View
+    controllerName="calculatorproject.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+<Page title="Calculadora CAP">
+        <content>
+            <VBox justifyContent="Center" width="300px">
+                <Input id="display" width="75%" value="{oModelView1>/display}" editable="false" textAlign="Right"/>
+                
+                <HBox justifyContent="Center">
+                    <Button text="7" press="onPress"/>
+                    <Button text="8" press="onPress"/>
+                    <Button text="9" press="onPress"/>
+                    <Button text="+" press="onPress"/>
+                </HBox>
+                <HBox justifyContent="Center">
+                    <Button text="4" press="onPress"/>
+                    <Button text="5" press="onPress"/>
+                    <Button text="6" press="onPress"/>
+                    <Button text="-" press="onPress"/>
+                </HBox>
+                <HBox justifyContent="Center">
+                    <Button text="1" press="onPress"/>
+                    <Button text="2" press="onPress"/>
+                    <Button text="3" press="onPress"/>
+                    <Button text="*" press="onPress"/>
+                </HBox>
+                <HBox justifyContent="Center">
+                    <Button text="CE" press="onPress"/>
+                    <Button text="0" press="onPress"/>
+                    <Button text="=" press="onCalculate"/>
+                    <Button text="÷" press="onPress"/>
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
